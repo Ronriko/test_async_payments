@@ -1,0 +1,33 @@
+# Secrets: a pattern without a slash already matches at any depth, the masks make it explicit
+.env
+*/.env
+**/.env
+.env.*
+!.env.example
+
+# Virtual environments and tool folders
+.venv/
+venv/
+.poetry/
+
+# Python and tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+logs/
+
+# Local databases
+*.db
+*.sqlite3
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store

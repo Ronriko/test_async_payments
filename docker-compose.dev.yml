@@ -1,0 +1,9 @@
+# Local development on the host: publishes PostgreSQL and AMQP on 127.0.0.1.
+# docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d postgres rabbitmq
+services:
+  postgres:
+    ports:
+      - "127.0.0.1:5432:5432"
+  rabbitmq:
+    ports:
+      - "127.0.0.1:5672:5672"

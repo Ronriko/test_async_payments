@@ -1,0 +1,67 @@
+[project]
+name = "async-payments"
+version = "1.0.0"
+description = "Asynchronous payment processing service: FastAPI + PostgreSQL + RabbitMQ (FastStream)"
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "alembic>=1.16",
+    "asyncpg>=0.30",
+    "fastapi>=0.150",
+    "faststream[rabbit]>=0.7",
+    "httpx>=0.28",
+    "pydantic>=2.11",
+    "pydantic-settings>=2.10",
+    "sqlalchemy[asyncio]>=2.0.40",
+    "uvicorn>=0.34",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.17",
+    "pytest>=8.4",
+    "pytest-asyncio>=1.1",
+    "ruff>=0.12",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F", "I", "N", "UP", "B", "A", "C4", "SIM", "RET", "ASYNC", "S", "BLE",
+    "DTZ", "PT", "PIE", "T20", "TRY", "PERF", "RUF", "ANN", "FAST",
+]
+ignore = ["TRY003"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106", "ANN401"]
+"alembic/**" = ["ANN"]
+# the gateway emulator draws its 90/10 outcome, nothing cryptographic
+"app/clients/gateway.py" = ["S311"]
+
+[tool.ruff.lint.isort]
+# the local alembic/ migrations folder must not turn the alembic package into first-party code
+known-third-party = ["alembic"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+plugins = ["pydantic.mypy"]
+exclude = ["^alembic/"]
+
+[[tool.mypy.overrides]]
+module = ["faststream.*"]
+follow_untyped_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+markers = ["rabbitmq: needs a real RabbitMQ broker (RABBITMQ_URL)"]
